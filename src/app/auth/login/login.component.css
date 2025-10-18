@@ -1,0 +1,81 @@
+/* Fond global */
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url('src/assets/OIP1.jpg'); /* mettre ton image dans assets */
+  background-size: cover;
+  background-position: center;
+}
+
+/* Card centrée */
+.auth-card {
+background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  width: 320px;
+  text-align: center;
+}
+
+/* Titres */
+.auth-card h2 {
+  margin-bottom: 25px;
+  color: #333;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Form groups */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Button */
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Texte inscription */
+.signup-text {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #333;
+}
+
+.signup-text a {
+  color: #007BFF;
+  text-decoration: none;
+}
+
+.signup-text a:hover {
+  text-decoration: underline;
+}

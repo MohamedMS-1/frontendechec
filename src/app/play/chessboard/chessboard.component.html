@@ -1,0 +1,11 @@
+<div class="chessboard">
+  <div *ngFor="let row of board; let i = index" class="row">
+    <div *ngFor="let cell of row; let j = index"
+         [class.white]="(i+j) % 2 === 0"
+         [class.black]="(i+j) % 2 !== 0"
+         (click)="onCellClick(i,j)">
+      {{ cell }}
+    </div>
+  </div>
+</div>
+

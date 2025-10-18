@@ -1,0 +1,62 @@
+<div class="lobby-container">
+  <!-- HEADER -->
+  <header class="lobby-header">
+    <h1>Lobby d'Échecs</h1>
+    <button class="logout-btn" (click)="logout()">Déconnexion</button>
+  </header>
+
+  <!-- MAIN -->
+  <main class="lobby-content">
+    <!-- Liste des joueurs -->
+    <div class="players-list">
+      <h2>Joueurs connectés</h2>
+      <ul>
+        <li *ngFor="let player of players">
+          <span>{{ player }}</span>
+          <button (click)="invite(player)">Inviter</button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Zone d'échecs -->
+    <div class="chess-area">
+      <div class="chess-header">
+        <h3>Plateau interactif</h3>
+        <div class="controls">
+          <label>
+            Thème :
+            <select [(ngModel)]="selectedTheme" (change)="changeTheme(selectedTheme)">
+              <option *ngFor="let theme of themes" [value]="theme">{{ theme }}</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <!-- Plateau -->
+      <div class="chess-board">
+        <div
+          *ngFor="let cell of boardFlat; let idx = index"
+          class="chess-cell"
+          [class.selected]="isSelected(getRow(idx), getCol(idx))"
+          [style.background-color]="getCellColor(getRow(idx), getCol(idx))"
+          (click)="selectCell(getRow(idx), getCol(idx))"
+        >
+          <img *ngIf="cell" [src]="'assets/pieces/' + cell + '.png'" alt="{{ cell }}" />
+        </div>
+      </div>
+
+      <!-- Boutons de contrôle -->
+      <div class="move-buttons">
+        <button (click)="cancelMove()">Annuler</button>
+        <button (click)="resetBoard()">Réinitialiser</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="lobby-footer">
+    <div class="status"><strong>Statut :</strong> {{ gameStatus }}</div>
+    <div class="turn"><strong>Tour de :</strong> {{ currentTurn }}</div>
+    <div class="timer"><strong>Temps restant :</strong> {{ timer }} s</div>
+  </footer>
+</div>
