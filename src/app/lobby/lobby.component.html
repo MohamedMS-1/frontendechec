@@ -8,55 +8,77 @@
   <!-- MAIN -->
   <main class="lobby-content">
     <!-- Liste des joueurs -->
-    <div class="players-list">
+    <aside class="players-list" aria-label="Liste des joueurs connectés">
       <h2>Joueurs connectés</h2>
       <ul>
-        <li *ngFor="let player of players">
+        <li *ngFor="let player of players" tabindex="0">
           <span>{{ player }}</span>
           <button (click)="invite(player)">Inviter</button>
         </li>
       </ul>
-    </div>
+    </aside>
 
     <!-- Zone d'échecs -->
-    <div class="chess-area">
+    <section class="chess-area" aria-label="Zone de jeu d'échecs">
       <div class="chess-header">
-        <h3>Plateau interactif</h3>
+     
         <div class="controls">
-          <label>
+          <label for="theme-select">
             Thème :
-            <select [(ngModel)]="selectedTheme" (change)="changeTheme(selectedTheme)">
+            <select
+              id="theme-select"
+              [(ngModel)]="selectedTheme"
+              (change)="changeTheme(selectedTheme)"
+              aria-live="polite"
+            >
               <option *ngFor="let theme of themes" [value]="theme">{{ theme }}</option>
             </select>
           </label>
         </div>
       </div>
 
-      <!-- Plateau -->
-      <div class="chess-board">
+      <!-- Plateau d'échecs -->
+      <div class="chess-board" role="grid" aria-label="Plateau d'échecs 8x8" style="margin-bottom: 50px;">
         <div
           *ngFor="let cell of boardFlat; let idx = index"
           class="chess-cell"
           [class.selected]="isSelected(getRow(idx), getCol(idx))"
           [style.background-color]="getCellColor(getRow(idx), getCol(idx))"
           (click)="selectCell(getRow(idx), getCol(idx))"
+          role="gridcell"
+          tabindex="0"
+          [attr.aria-selected]="isSelected(getRow(idx), getCol(idx))"
+          [attr.aria-label]="'Case ' + toSquare(getRow(idx), getCol(idx)) + (cell ? ', pièce: ' + cell : ', vide')"
         >
-          <img *ngIf="cell" [src]="'assets/pieces/' + cell + '.png'" alt="{{ cell }}" />
+          <img *ngIf="cell" [src]="'assets/pieces/' + cell + '.png'" [alt]="cell + ' pièce d’échec'" />
         </div>
       </div>
 
       <!-- Boutons de contrôle -->
-      <div class="move-buttons">
-        <button (click)="cancelMove()">Annuler</button>
-        <button (click)="resetBoard()">Réinitialiser</button>
+      <div class="move-buttons" role="group" aria-label="Boutons de contrôle du jeu">
+        <button (click)="cancelMove()" type="button">Annuler</button>
+        <button (click)="resetBoard()" type="button">Réinitialiser</button>
       </div>
-    </div>
+    </section>
   </main>
 
   <!-- FOOTER -->
-  <footer class="lobby-footer">
+  <footer class="lobby-footer" role="contentinfo">
     <div class="status"><strong>Statut :</strong> {{ gameStatus }}</div>
     <div class="turn"><strong>Tour de :</strong> {{ currentTurn }}</div>
     <div class="timer"><strong>Temps restant :</strong> {{ timer }} s</div>
   </footer>
+</div>
+
+<!-- Modal Invitation -->
+<div class="modal-backdrop" *ngIf="invitationModalVisible" role="dialog" aria-modal="true" aria-labelledby="invitationTitle" aria-describedby="invitationDesc">
+  <div class="modal-content">
+    <p id="invitationDesc">
+      <strong>{{ currentInvitation?.sender?.username || 'Quelqu’un' }}</strong> vous invite à jouer aux échecs.
+    </p>
+    <div class="modal-buttons">
+      <button (click)="acceptInvitation()" class="btn accept-btn" type="button">Accepter</button>
+      <button (click)="declineInvitation()" class="btn decline-btn" type="button">Refuser</button>
+    </div>
+  </div>
 </div>

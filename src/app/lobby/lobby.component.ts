@@ -18,6 +18,8 @@ export class LobbyComponent implements OnInit {
   gameStatus = 'En attente';
   currentTurn = 'Blanc';
   timer = 60;
+  invitationModalVisible = false;
+  currentInvitation: any = null;
 
   selectedTheme = 'Classique';
   themes = ['Classique', 'Sombre', 'Clair'];
@@ -33,11 +35,13 @@ export class LobbyComponent implements OnInit {
 
     this.chessService.players$.subscribe(list => this.players = list);
 
-    this.chessService.onInvitation(this.username, (from) => {
-      if (confirm(`${from} t’invite à jouer. Accepter ?`)) {
-        this.chessService.acceptInvitation(Number(from));
-      }
+    this.chessService.onInvitation(invitation => {
+      console.log('📨 Invitation reçue:', invitation);
+      this.currentInvitation = invitation;
+      this.invitationModalVisible = true;
     });
+
+
   }
 
   updateBoard(): void {
@@ -142,7 +146,8 @@ this.possibleMoves = moves.map((m: any) => this.fromSquare(m.to));
   }
 
   invite(player: string): void {
-    alert(`Invitation envoyée à ${player}`);
+    //alert(`Invitation envoyée à ${player}`);
+     this.chessService.sendInvitation(player);
   }
 
   logout(): void {
@@ -152,6 +157,26 @@ this.possibleMoves = moves.map((m: any) => this.fromSquare(m.to));
   changeTheme(theme: string): void {
     this.selectedTheme = theme;
     alert(`Thème changé en ${theme}`);
+  }
+
+  acceptInvitation() {
+    if (this.currentInvitation) {
+      this.chessService.acceptInvitation(this.currentInvitation.id);
+      this.closeInvitationModal();
+    }
+  }
+
+  declineInvitation() {
+    // Ici tu peux envoyer un refus via HTTP ou WebSocket si nécessaire
+    if (this.currentInvitation) {
+      this.chessService.declineInvitation(this.currentInvitation.id);
+      this.closeInvitationModal();
+    }
+  }
+
+  closeInvitationModal() {
+    this.invitationModalVisible = false;
+    this.currentInvitation = null;
   }
 }
 

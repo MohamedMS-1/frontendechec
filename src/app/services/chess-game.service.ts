@@ -24,17 +24,23 @@ connect(username: string) {
     connectHeaders: { Authorization: `Bearer ${token}` } // <-- ici
   });
 
-  this.client.onConnect = () => {
-    console.log('✅ Connecté au WebSocket avec token !');
-    this.client.publish({ destination: '/app/join', body: username });
-    this.connected$.next(true);
+this.client.onConnect = () => {
+  console.log('✅ Connecté au WebSocket avec token !');
+  this.client.publish({ destination: '/app/join', body: username });
+  this.connected$.next(true);
 
-    this.client.subscribe(`/topic/connected-users/test`, (msg: any) => {
-      const users = JSON.parse(msg.body);
-      console.log('📢 Utilisateurs reçus du serveur :', users);
-      this.players$.next(users);
-    });
-  };
+  // Abonnement – doit être juste ici
+  this.client.subscribe(`/topic/connected-users/test`, (msg: any) => {
+    console.log('📢 Utilisateurs reçus du serveur :', msg.body);
+    const users = JSON.parse(msg.body);
+    this.players$.next(users);
+  });
+
+  // Optionnel : récupération de la liste actuelle via HTTP
+  this.http.get<string[]>(`${this.apiUrl}/connected-users/test`, { headers: this.auth.getAuthHeaders() })
+    .subscribe(users => this.players$.next(users));
+};
+
 
   this.client.activate();
 }
@@ -48,13 +54,28 @@ onMove(to: string, callback: (move: string) => void) {
 }
 
 
-onInvitation(to: string, callback: (from: string) => void) {
+private invitationSubscribed = false;
+
+onInvitation(callback: (invitation: any) => void) {
+  if (this.client && this.connected$.value && !this.invitationSubscribed) {
+    this.invitationSubscribed = true;
+    this.client.subscribe('/user/queue/invitations', (msg: any) => {
+      const invitation = JSON.parse(msg.body);
+      callback(invitation);
+    });
+  }
+
   this.connected$.subscribe(isConnected => {
-    if (isConnected && this.client) {
-      this.client.subscribe(`/topic/invite/${to}`, (msg: any) => callback(msg.body));
+    if (isConnected && this.client && !this.invitationSubscribed) {
+      this.invitationSubscribed = true;
+      this.client.subscribe('/user/queue/invitations', (msg: any) => {
+        const invitation = JSON.parse(msg.body);
+        callback(invitation);
+      });
     }
   });
 }
+
 
 
   sendInvitation(receiverUsername: string) {
@@ -65,6 +86,11 @@ onInvitation(to: string, callback: (from: string) => void) {
 
 acceptInvitation(invitationId: number) {
   this.http.post(`${this.apiUrl}/invitations/${invitationId}/accept`, {}, { headers: this.auth.getAuthHeaders() })
+    .subscribe();
+}
+
+declineInvitation(invitationId: number) {
+  this.http.post(`${this.apiUrl}/invitations/${invitationId}/decline`, {}, { headers: this.auth.getAuthHeaders() })
     .subscribe();
 }
 
