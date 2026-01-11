@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 
 import { Message } from '@stomp/stompjs';
-import { Client, IMessage, IFrame } from '@stomp/stompjs';
+import { Client, IFrame } from '@stomp/stompjs';
 import { IMessage } from '@stomp/stompjs';
 
 @Injectable({ providedIn: 'root' })
