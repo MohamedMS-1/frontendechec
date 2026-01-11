@@ -1,7 +1,7 @@
 <div class="lobby-container">
   <!-- HEADER -->
   <header class="lobby-header">
-    <h1>Lobby d'Échecs</h1>
+    <h1>Votre couleur {{playerColor}}</h1>
     <button class="logout-btn" (click)="logout()">Déconnexion</button>
   </header>
 
@@ -11,15 +11,19 @@
     <aside class="players-list" aria-label="Liste des joueurs connectés">
       <h2>Joueurs connectés</h2>
       <ul>
-        <li *ngFor="let player of players" tabindex="0">
-          <span>{{ player }}</span>
-          <button (click)="invite(player)">Inviter</button>
-        </li>
+      <ng-container *ngFor="let player of players">
+      <li *ngIf="player !== username" tabindex="0">
+        <span>{{ player }}</span>
+        <button (click)="invite(player)">Inviter</button>
+      </li>
+    </ng-container>
+
       </ul>
     </aside>
 
     <!-- Zone d'échecs -->
     <section class="chess-area" aria-label="Zone de jeu d'échecs">
+      <!--
       <div class="chess-header">
      
         <div class="controls">
@@ -36,6 +40,7 @@
           </label>
         </div>
       </div>
+      -->
 
       <!-- Plateau d'échecs -->
       <div class="chess-board" role="grid" aria-label="Plateau d'échecs 8x8" style="margin-bottom: 50px;">
@@ -82,3 +87,23 @@
     </div>
   </div>
 </div>
+
+<!-- Modal Confirmation Envoi d'Invitation -->
+<div
+  class="modal-backdrop"
+  *ngIf="invitationSentModalVisible"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="sentInvitationTitle"
+  aria-describedby="sentInvitationDesc"
+>
+  <div class="modal-content">
+    <p id="sentInvitationDesc">
+      ✅ Invitation envoyée à <strong>{{ invitedPlayer }}</strong>.
+    </p>
+    <div class="modal-buttons">
+      <button (click)="closeInvitationSentModal()" class="btn" type="button">OK</button>
+    </div>
+  </div>
+</div>
+
