@@ -10,8 +10,8 @@ import { Message } from '@stomp/stompjs';
 export class ChessGameService {
   private client!: InstanceType<typeof Client>;
   public players$ = new BehaviorSubject<string[]>([]);
-  private apiUrl = 'http://localhost:8080/api';
-  //private apiUrl = 'https://unoverwhelmed-hydrobromic-ervin.ngrok-free.dev/api'
+  //private apiUrl = 'http://192.168.100.55:8080/api';
+  private apiUrl = 'https://unoverwhelmed-hydrobromic-ervin.ngrok-free.dev/api'
   public connected$ = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient, private auth: AuthService) {}
@@ -19,11 +19,26 @@ export class ChessGameService {
 connect(username: string) {
   const token = this.auth.getToken(); // récupère ton JWT
 
+  /*
   this.client = new Client({
     webSocketFactory: () => new SockJS(`${this.apiUrl.replace('/api', '')}/ws`),
     reconnectDelay: 5000,
-    connectHeaders: { Authorization: `Bearer ${token}` } // <-- ici
+    connectHeaders: { Authorization: `Bearer ${token}` } 
+  });*/
+
+  this.client = new Client({
+    webSocketFactory: () =>
+      new SockJS(
+        `${this.apiUrl.replace('/api', '')}/ws`,
+        null,
+        { withCredentials: false } // 🔥 FIX CRITIQUE
+      ),
+    reconnectDelay: 5000,
+    connectHeaders: {
+      Authorization: `Bearer ${token}`
+    }
   });
+
 
 this.client.onConnect = () => {
   console.log('✅ Connecté au WebSocket avec token !');
