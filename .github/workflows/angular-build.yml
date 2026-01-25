@@ -1,0 +1,41 @@
+name: Angular Build
+
+# Déclenche le workflow à chaque push sur n'importe quelle branche
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Récupérer le code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ Installer Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' # adapte selon la version utilisée par ton projet
+
+      # 3️⃣ Installer Angular CLI globalement si besoin
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli
+
+      # 4️⃣ Installer les dépendances du projet
+      - name: Install dependencies
+        run: npm ci
+
+      # 5️⃣ Lancer le build Angular
+      - name: Build Angular project
+        run: npm run build -- --prod
+
+      # 6️⃣ (Optionnel) Sauvegarder le build comme artefact
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: angular-build
+          path: dist/
