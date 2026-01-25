@@ -26,18 +26,21 @@ connect(username: string) {
     connectHeaders: { Authorization: `Bearer ${token}` } 
   });*/
 
-  this.client = new Client({
-    webSocketFactory: () =>
-      new SockJS(
-        `${this.apiUrl.replace('/api', '')}/ws`,
-        null,
-        { withCredentials: false } // 🔥 FIX CRITIQUE
-      ),
-    reconnectDelay: 5000,
-    connectHeaders: {
-      Authorization: `Bearer ${token}`
-    }
-  });
+this.client = new Client({
+  webSocketFactory: () =>
+    new SockJS(
+      `${this.apiUrl.replace('/api', '')}/ws`,
+      null,
+      { 
+        transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
+        withCredentials: true  // ← CHANGE À true
+      }
+    ),
+  reconnectDelay: 5000,
+  connectHeaders: {
+    Authorization: `Bearer ${token}`
+  }
+});
 
 
 this.client.onConnect = () => {
