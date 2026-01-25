@@ -31,7 +31,7 @@ jobs:
 
       # 5️⃣ Lancer le build Angular
       - name: Build Angular project
-        run: npm run build -- --prod
+        run: npm run build -- --configuration production
 
       # 6️⃣ Sauvegarder le build comme artefact (version corrigée)
       - name: Upload build artifact
