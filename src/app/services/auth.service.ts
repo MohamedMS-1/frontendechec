@@ -26,6 +26,9 @@ export class AuthService {
   }
 
   getAuthHeaders(): HttpHeaders {
-    return new HttpHeaders({ Authorization: `Bearer ${this.getToken()}` });
-  }
+  return new HttpHeaders({ 
+    Authorization: `Bearer ${this.getToken()}`,
+    'ngrok-skip-browser-warning': '1'  // <-- Ajout ici
+  });
+}
 }
