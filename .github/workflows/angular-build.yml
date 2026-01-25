@@ -28,7 +28,7 @@ jobs:
         run: ng build --configuration production
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v6
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages # branche où GitHub Pages sert les fichiers
           folder: dist/chess-app # dossier généré par Angular
