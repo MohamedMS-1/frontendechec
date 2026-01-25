@@ -5,6 +5,9 @@ on:
     branches:
       - '**'
 
+permissions:
+  contents: write  # ← donne la permission d'écriture sur le repo
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -33,3 +36,4 @@ jobs:
           branch: gh-pages
           folder: dist/chess-app
           token: ${{ secrets.GITHUB_TOKEN }}
+
