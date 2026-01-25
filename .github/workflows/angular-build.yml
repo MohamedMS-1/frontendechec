@@ -33,9 +33,9 @@ jobs:
       - name: Build Angular project
         run: npm run build -- --prod
 
-      # 6️⃣ (Optionnel) Sauvegarder le build comme artefact
+      # 6️⃣ Sauvegarder le build comme artefact (version corrigée)
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: angular-build
           path: dist/
