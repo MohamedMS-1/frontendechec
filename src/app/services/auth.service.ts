@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'http://192.168.100.55:8080/api/auth';
+  private apiUrl = 'http://192.168.100.55:4200/api/auth';
   //private apiUrl = 'https://unoverwhelmed-hydrobromic-ervin.ngrok-free.dev/api/auth'
 
   constructor(private http: HttpClient) {}
