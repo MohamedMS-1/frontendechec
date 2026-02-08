@@ -10,8 +10,8 @@ import { Message } from '@stomp/stompjs';
 export class ChessGameService {
   private client!: InstanceType<typeof Client>;
   public players$ = new BehaviorSubject<string[]>([]);
-  //private apiUrl = 'http://192.168.100.55:8080/api';
-  private apiUrl = 'https://unoverwhelmed-hydrobromic-ervin.ngrok-free.dev/api'
+  private apiUrl = 'http://192.168.100.55:8080/api';
+  //private apiUrl = 'https://unoverwhelmed-hydrobromic-ervin.ngrok-free.dev/api'
   public connected$ = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient, private auth: AuthService) {}
